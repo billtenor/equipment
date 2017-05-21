@@ -1,0 +1,43 @@
+<DataModel>
+    <DataWarehouseModelID>performanceTest</DataWarehouseModelID>
+    <DataModelID>performanceTest_DATA_01</DataModelID>
+    <DataModelEngine>none</DataModelEngine>
+    <DataModelPara></DataModelPara>
+    <DateTimeDim>
+        <DateID grainLevel="1">
+            <Date></Date>
+            <Month></Month>
+            <Year></Year>
+        </DateID>
+    </DateTimeDim>
+    <SpaceDim>
+        <SpaceID grainLevel="1">
+            <SpaceName></SpaceName>
+            <SpaceDescription></SpaceDescription>
+        </SpaceID>
+        <AreaID grainLevel="2">
+            <AreaName></AreaName>
+        </AreaID>
+    </SpaceDim>
+    <MeasureDim>
+        <MeasureID grainLevel="1">
+            <MeasureName></MeasureName>
+            <MeasureDescription></MeasureDescription>
+            <MeasureType></MeasureType>
+            <MeasureConstraints></MeasureConstraints>
+            <MeasureUnit></MeasureUnit>
+            <MeasureCalculate></MeasureCalculate>
+            <MeasureCalculateEquation></MeasureCalculateEquation>
+        </MeasureID>
+    </MeasureDim>
+    <FactsHeadsTable>
+        <FactID></FactID>
+        <FactName></FactName>
+        <FactType></FactType>
+        <DateGrain></DateGrain>
+        <SpaceGrain></SpaceGrain>
+        <TimeGrain></TimeGrain>
+        <FatherFactID></FatherFactID>
+        <FactFuction></FactFuction>
+    </FactsHeadsTable>
+</DataModel>

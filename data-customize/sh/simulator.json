@@ -1,0 +1,10 @@
+{
+  "topicName": "test",
+  "kafkaBrokerHosts": "192.168.100.77:9092,192.168.100.76:9092",
+  "topologyName": "performanceTestSimulator",
+  "NumWorkers": 10,
+  "topologyConfig": {
+    "dataSourceModelID": "performanceTest_SORSE",
+    "parallel":20
+  }
+}

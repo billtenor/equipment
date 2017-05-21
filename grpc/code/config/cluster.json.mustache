@@ -1,0 +1,48 @@
+{
+    "name": {{cluster.name}},
+    "description": {{cluster.description}},
+    "vxnet": {{cluster.vxnet}},
+    "nodes": [{
+        "loadbalancer": {{cluster.grpc-node.loadbalancer}},
+        "container": {
+            "type": "kvm",
+            "zone": "pek3a",
+            "image": "img-jr2quuvn"
+        },
+        "count": {{cluster.grpc-node.count}},
+        "cpu": {{cluster.grpc-node.cpu}},
+        "memory": {{cluster.grpc-node.memory}},
+		"instance_class": {{cluster.grpc-node.instance_class}},
+        "volume": {
+            "size": {{cluster.grpc-node.volume_size}}
+        },
+        "services": {
+            "start": {
+                "cmd": "/usr/local/grpc/service.sh start"
+            },
+            "stop": {
+                "cmd": "/usr/local/grpc/service.sh stop"
+            }
+        }
+    }],
+    "advanced_actions": ["change_vxnet", "scale_horizontal"],
+	"endpoints": {
+		"grpc_service": {
+			"port":	8787,
+			"protocol":	"tcp"
+		}
+	},
+    "env":{
+        "max_workers":{{env.max_workers}}
+    },
+	"health_check":	{
+		"enable": true,
+		"interval_sec": 60,
+		"timeout_sec": 10,
+		"action_timeout_sec": 30,
+		"healthy_threshold": 2,
+		"unhealthy_threshold": 2,
+		"check_cmd": "/usr/local/grpc/service.sh status",
+		"action_cmd": "/usr/local/grpc/service.sh restart"
+	}
+}

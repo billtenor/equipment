@@ -1,0 +1,33 @@
+{
+  "spaceID": "15346248",
+  "defaultTimeStamp": 124521354321,
+  "timeStamp":{
+    "2":124521354321
+  },
+  "data": [
+    {
+      "measureID":"Voltage",
+      "facts":{
+        "1":86
+      }
+    },
+    {
+      "measureID":"Switch",
+      "facts":{
+        "3":true
+      }
+    },
+    {
+      "measureID":"State",
+      "facts":{
+        "3":"pending"
+      }
+    },
+    {
+      "measureID":"Current",
+      "facts":{
+        "1":0.85
+      }
+    }
+  ]
+}

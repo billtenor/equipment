@@ -1,0 +1,10 @@
+MeasureID MeasureName MeasureDescription MeasureType MeasureConstraints MeasureUnit MeasureRely MeasureEquation
+Voltage Voltage "The Voltage of the device" Long "range (20,100]" V "." "."
+Current Current "The Current of the device" Double "range [0.20,1.00)" mA "." "."
+Switch Switch "The Switch of the device" Boolean "in [false,true]" "." "." "."
+State State "The State of the device" String "in [active,inactive,pending]" "." "." "."
+Power Power "The Power of the device" Double "." mW "Voltage,Current" "data_Voltage*data_Current"
+Load Load "The Load of the device" Double "." kΩ "Voltage,Current" "data_Voltage/data_Current"
+PowerW PowerW "The Power in W of the device" Double "." W "Power" "data_Power/1000"
+Acceleration_g Acceleration "The Acceleration of the device" Double "range [0.80,1.50)" g "." "."
+Acceleration_m/s^2 Acceleration "The Acceleration in m/s^2 of the device" Double "." "m/s^2" "Acceleration_g" "data_Acceleration_g*9.8"

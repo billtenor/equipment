@@ -1,0 +1,360 @@
+{% extends 'cloudPlatform/base.html' %}
+
+{% block css %}
+    <!-- Bootstrap 3.3.6 -->
+    <link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="/static/dist/css/AdminLTE.min.css">
+    <!-- AdminLTE Skins. Choose a skin from the css/skins
+         folder instead of downloading all of them to reduce the load. -->
+    <link rel="stylesheet" href="/static/dist/css/skins/_all-skins.min.css">
+
+    <link rel="stylesheet" href="/static/dag/styles/main.css">
+    <!-- Tagmanager CSS -->
+    <link rel="stylesheet" href="/static/typeahead.js/tagmanager.css">
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+  <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+  <![endif]-->
+{% endblock %}
+
+{% block content %}
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <h1>
+                需求详细信息
+            </h1>
+            <ol class="breadcrumb">
+                <li><a href="{% url 'index'%}"><i class="fa fa-home"></i> Home</a></li>
+                <!--li class="active">Dashboard</li-->
+            </ol>
+        </section>
+        <!-- Main content -->
+        <section class="content">
+            <!-- infobox -->
+            <div class="box box-success color-palette-box">
+                <div class="box-header with-border">
+                    <h4 style="float:left"><strong>基本信息</strong></h4>
+                </div>
+                <!-- /.box-header -->
+
+                <div class="box-body">
+                    <div>
+                        <table class="table table-condensed">
+                            <tr>
+                                <td>需求名称</td>
+                                <td>
+                                    <div>
+                                        {{ demand.DemandName }}
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>创建时间</td>
+                                <td>
+                                    <div>
+                                        {{ demand.CreateTime }}
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>上次修改时间</td>
+                                <td>
+                                    <div>
+                                        {{ demand.LastModifyTime }}
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>需求标签</td>
+                                <td>
+                                    <div>
+                                        {% for i in demandtag %}
+                                            <div class="tm-tag tm-tag-info">{{ i }}</div>
+                                        {% endfor %}
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>需求描述</td>
+                                <td>
+                                    <div>
+                                        {{ demand.DemandDescrip }}
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div><!-- /.box-body -->
+            </div>
+
+            <div class="box box-success color-palette-box">
+                <div class="box-header with-border">
+                    <h4 style="float:left"><strong>相关需求模板</strong></h4>
+                </div>
+                <!-- /.box-header -->
+
+                <div class="box-body">
+                    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#exampleModal1" onclick="fill_add_modal()">
+                        <i class="fa fa-fw fa-plus-circle"></i>添加
+                    </button>
+                    <p></p>
+                    <table id="example2" class="table table-bordered table-hover">
+                        <thead>
+                        <tr>
+                            <td>模板名称</td>
+                            <td>模板参数</td>
+                            <td>创建时间</td>
+                            <td>上次修改时间</td>
+                            <td>模板描述</td>
+                            <td colspan="3">操作</td>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for i in demandtemplate %}
+                            <tr>
+                            <td class="{{ i.DemandTemplateID }}">{{ i.DemandTemplateName }}</td>
+                            <td class="{{ i.DemandTemplateID }}">{{ i.DemandTemplatePara }}</td>
+                            <td class="{{ i.DemandTemplateID }}">{{ i.CreateTime }}</td>
+                            <td class="{{ i.DemandTemplateID }}">{{ i.LastModifyTime }}</td>
+                            <td class="{{ i.DemandTemplateID }}">{{ i.DemandTemplateDescrip }}</td>
+                                <td style="width:50px">
+                                    <button type="button" class="btn btn-info bg-orange" name="{{ i.DemandTemplateID }} select" data-toggle="modal" data-target="#exampleModal1" onclick="fill_modal(name)">
+                                        <i class="fa fa-fw fa-search"></i>查看
+                                    </button>
+                                </td>
+                                <td style="width:50px">
+                                    <button type="button" class="btn btn-info bg-orange" name="{{ i.DemandTemplateID }}" onclick="modify_to_demandmodule(name)">
+                                        <i class="fa fa-fw fa-pencil"></i>修改
+                                    </button>
+                                </td>
+                                <td style="width:50px">
+                                    <button type="button" class="btn btn-info bg-orange" name="{{ i.DemandTemplateID }} delete" data-toggle="modal" data-target="#exampleModal1" onclick="fill_modal(name)">
+                                        <i class="fa fa-fw fa-trash"></i>删除
+                                    </button>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+
+                </div><!-- /.box-body -->
+
+            </div>
+
+
+            <!-- modal -->
+            <div class="modal fade" id="exampleModal1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h3 class="modal-title" id="exampleModalLabel1">New message</h3>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <div class="dag-area">
+                                    <p class="box-body"></p>
+                                    <p><strong>DAG: <span id="dag-name"></span></strong></p>
+                                    <div id="dag">
+                                        <svg height="180" width="560">
+                                            <g class='testdag' transform="translate(20, 20)"/>
+                                        </svg>
+                                    </div>
+                                    </div>
+                                    <p><strong>模板名称</strong></p>
+                                    <p><input type="text" class="to_fill to_fill_name" readonly="true"></p>
+                                    <p><strong>模板参数</strong></p>
+                                    <p><input type="text" class="to_fill to_fill_para" readonly="true"></p>
+                                    <div class="time-area">
+                                    <p><strong>创建时间</strong></p>
+                                    <p><input type="text" class="to_fill" readonly="true"></p>
+                                    <p><strong>上次修改时间</strong></p>
+                                    <p><input type="text" class="to_fill" readonly="true"></p>
+                                    </div>
+                                    <p><strong>模板描述</strong></p>
+                                    <p><textarea style="width:550px;height:200px;overflow:scroll;overflow-x:hidden;overflow-y:hidden;resize:none;" class="to_fill to_fill_descrip" readonly="true"></textarea></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                            <button type="button" class="btn btn-info to_add" data-dismiss="modal" onclick="add_to_demandmodule()">确认添加</button>
+                            <form style="display: inline-block" method="post" action="{% url 'demandtemplateShow' %}">
+                                <input type="hidden" class='demandid' name="demandid" value="{{ demand.DemandID }}">
+                                <input type="hidden" class="templateid" name="templateid">
+                                <button type="submit" class="btn btn-info to_delete"></button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+        <!-- /.content -->
+    </div>
+    <!-- /.content-wrapper -->
+
+
+
+
+{% endblock %}
+
+{% block js %}
+    <!-- jQuery 2.2.3 -->
+    <script src="/static/plugins/jQuery/jquery-2.2.3.min.js"></script>
+    <!-- jQuery UI 1.11.4 -->
+    <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
+    <!-- Bootstrap 3.3.6 -->
+    <script src="/static/bootstrap/js/bootstrap.min.js"></script>
+    <!-- jQuery Knob Chart -->
+    <script src="/static/plugins/knob/jquery.knob.js"></script>
+    <!-- AdminLTE App -->
+    <script src="/static/dist/js/app.min.js"></script>
+    <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+    <script src="/static/dist/js/pages/dashboard.js"></script>
+    <!-- AdminLTE for demo purposes -->
+    <script src="/static/dist/js/demo.js"></script>
+
+    <script src="/static/dag/scripts/vendor/d3.v3.js"></script>
+    <script src="/static/dag/scripts/vendor/dagre-d3.js"></script>
+    <!--draw the DAG-->
+    <script>
+        /*global jQuery, d3, dagreD3, DAG */
+
+        (function () {
+            'use strict';
+            window.DAG = {
+                displayGraph: function (graph, dagNameElem, svgElem) {
+                    dagNameElem.text(graph.name);
+                    this.renderGraph(graph, svgElem);
+                },
+
+                renderGraph: function(graph, svgParent) {
+                    var nodes = graph.nodes;
+                    var links = graph.links;
+
+                    var graphElem = svgParent.children('g').get(0);
+                    var svg = d3.select(graphElem);
+                    var renderer = new dagreD3.Renderer();
+                    var layout = dagreD3.layout().rankDir('LR');
+                    renderer.layout(layout).run(dagreD3.json.decode(nodes, links), svg.append('g'));
+
+                    // Adjust SVG height to content
+                    var main = svgParent.find('g > g');
+                    var h = main.get(0).getBoundingClientRect().height;
+                    var newHeight = h + 40;
+                    newHeight = newHeight < 80 ? 80 : newHeight;
+                    svgParent.height(newHeight);
+
+                    // Zoom
+                    d3.select(svgParent.get(0)).call(d3.behavior.zoom().on('zoom', function() {
+                        var ev = d3.event;
+                        svg.select('g')
+                            .attr('transform', 'translate(' + ev.translate + ') scale(' + ev.scale + ')');
+                    }));
+                }
+            };
+        })();
+    </script>
+
+    <script charset="UTF-8">
+
+    </script>
+
+    <script charset="UTF-8">
+    var sid;
+    function fill_modal(name) {
+        sid = name.split(' ')[0];
+        var method = name.split(' ')[1];
+        var fill_content = [];
+        $('#exampleModalLabel1').text('模板详细信息');
+        $('.time-area').show();
+        $('.to_add').hide();
+        $('.dag-area').show();
+        $('.templateid').val(sid);
+        if (method === 'select') {
+            $('.to_delete').hide();
+        }
+        else {
+            $('.to_delete').show();
+            $('.to_delete').text('确认删除');
+        }
+        $('.' + sid).each(function () {
+            fill_content.push($(this).text());
+        })
+        $('.to_fill').each(function () {
+            $(this).val(fill_content[0]);
+            $(this).attr('readOnly', 'true');
+            fill_content.shift();
+        })
+        $.ajax({
+            type: 'POST',
+            url: '/cloud/getDAG',
+            data: {'id': sid},
+            datatype: 'json',
+            asyc: false,
+            success: function (result) {
+                dag = JSON.parse(result);
+                loaddag();
+            }
+        })
+    }
+    </script>
+
+    <script charset="UTF-8">
+        var dag;
+        //load the DAG
+        function loaddag() {
+            // callback for graph data loading
+            $('.testdag').empty();
+            DAG.displayGraph(dag, jQuery('#dag-name'), jQuery('#dag > svg'));
+        }
+    </script>
+
+    <script charset="UTF-8">
+    function fill_add_modal() {
+        $('.time-area').hide();
+        $('.to_delete').hide();
+        $('.to_add').show();
+        $('.dag-area').hide();
+        $('#exampleModalLabel1').text('添加需求模板');
+        $('.to_fill').each(function () {
+            $(this).removeAttr('readOnly');
+            $(this).val('');
+        });
+    }
+    </script>
+
+    <script charset="UTF-8">
+    function add_to_demandmodule() {
+        var data = {'demandid': $('.demandid').val(), 'name': $('.to_fill_name').val(), 'para': $('.to_fill_para').val(), 'descrip': $('.to_fill_descrip').val()}
+        $.ajax({
+            type: 'POST',
+            url: '/cloud/adddemandmodule',
+            data: data,
+            datatype: 'json',
+            success: function (result) {
+                var url = '/cloud/demandmodule?id=' + result;
+                window.location.href=url;
+            }
+        });
+    }
+    </script>
+
+    <script charset="UTF-8">
+    function modify_to_demandmodule(name) {
+        var url = '/cloud/demandmodule?id=' + name;
+        window.location.href=url;
+    }
+    </script>
+{% endblock %}

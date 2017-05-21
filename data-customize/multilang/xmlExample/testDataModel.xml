@@ -1,0 +1,48 @@
+<DataModel>
+    <DataWarehouseModelID>testWarehouseModel</DataWarehouseModelID>
+    <DataModelID>testDataModel001</DataModelID>
+    <DataModelEngine>mysql</DataModelEngine>
+    <DataModelPara>
+        {"host":"192.168.100.254","port":"3306","username":"dataModelUser","password":"zhu88jie","databaseName":"dataModel"}
+    </DataModelPara>
+    <DateTimeDim>
+        <DateID grainLevel="1">
+            <Date></Date>
+            <Month></Month>
+            <Year></Year>
+        </DateID>
+    </DateTimeDim>
+    <SpaceDim>
+        <SpaceID grainLevel="1">
+            <SpaceName></SpaceName>
+            <SpaceDescription></SpaceDescription>
+            <LocateValueType></LocateValueType>
+            <LocateValue1></LocateValue1>
+            <LocateValue2></LocateValue2>
+        </SpaceID>
+        <AreaID grainLevel="2">
+            <AreaName></AreaName>
+        </AreaID>
+    </SpaceDim>
+    <MeasureDim>
+        <MeasureID grainLevel="1">
+            <MeasureName></MeasureName>
+            <MeasureDescription></MeasureDescription>
+            <MeasureType></MeasureType>
+            <MeasureConstraints></MeasureConstraints>
+            <MeasureUnit></MeasureUnit>
+            <MeasureRely></MeasureRely>
+            <MeasureCalculateEquation></MeasureCalculateEquation>
+        </MeasureID>
+    </MeasureDim>
+    <FactsHeadsTable>
+        <FactID></FactID>
+        <FactName></FactName>
+        <FactType></FactType>
+        <DateGrain></DateGrain>
+        <SpaceGrain></SpaceGrain>
+        <TimeGrain></TimeGrain>
+        <FatherFactID></FatherFactID>
+        <FactFuction></FactFuction>
+    </FactsHeadsTable>
+</DataModel>

@@ -1,0 +1,7 @@
+[template]
+src = "config.json.tmpl"
+dest = "/usr/local/grpc/RPCServer/config.json"
+keys = [
+    "/",
+]
+reload_cmd = "/usr/local/grpc/service.sh restart"

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<DataSourceModel>
+    <dataSourceModelID>libuznaksier</dataSourceModelID>
+    <dataGapTime>1500</dataGapTime>
+    <dataLifeTime>0</dataLifeTime>
+    <dataDimTable dataDimSize="4">
+        <dataDim>
+            <dataDimTableMajorKey>1</dataDimTableMajorKey>
+            <dataDimName>Voltage</dataDimName>
+            <dataDimDescription>The Voltage of the device</dataDimDescription>
+            <dataType>Integer</dataType>
+            <dataConstraints>range (20,100]</dataConstraints>
+            <dataUnit>mV</dataUnit>
+        </dataDim>
+        <dataDim>
+            <dataDimTableMajorKey>2</dataDimTableMajorKey>
+            <dataDimName>Current</dataDimName>
+            <dataDimDescription>The Current of the device</dataDimDescription>
+            <dataType>Double</dataType>
+            <dataConstraints>range [0.5,2.4)</dataConstraints>
+            <dataUnit>mA</dataUnit>
+        </dataDim>
+        <dataDim>
+            <dataDimTableMajorKey>3</dataDimTableMajorKey>
+            <dataDimName>Switch</dataDimName>
+            <dataDimDescription>The Switch of the device</dataDimDescription>
+            <dataType>Boolean</dataType>
+            <dataConstraints>in [false,true]</dataConstraints>
+            <dataUnit></dataUnit>
+        </dataDim>
+        <dataDim>
+            <dataDimTableMajorKey>4</dataDimTableMajorKey>
+            <dataDimName>State</dataDimName>
+            <dataDimDescription>The State of the device</dataDimDescription>
+            <dataType>String</dataType>
+            <dataConstraints>in [active,inactive,pending]</dataConstraints>
+            <dataUnit></dataUnit>
+        </dataDim>
+    </dataDimTable>
+    <spaceDimTable spaceDimSize="3">
+        <spaceDim></spaceDim>
+        <spaceDim></spaceDim>
+        <spaceDim></spaceDim>
+    </spaceDimTable>
+</DataSourceModel>

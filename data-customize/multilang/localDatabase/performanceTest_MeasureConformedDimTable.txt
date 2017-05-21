@@ -1,0 +1,5 @@
+MeasureID MeasureName MeasureDescription MeasureType MeasureConstraints MeasureUnit MeasureRely MeasureEquation
+Voltage Voltage "The Voltage of the device" Long "range (20,100]" V "." "."
+Current Current "The Current of the device" Double "range [0.20,1.00)" mA "." "."
+State State "The State of the device" String "in [active,inactive,pending]" "." "." "."
+Power Power "The Power of the device" Double "." mW "Voltage,Current" "data_Voltage*data_Current"

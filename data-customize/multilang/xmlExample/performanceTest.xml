@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<DataWarehouseModel>
+    <DataWarehouseModelID>performanceTest</DataWarehouseModelID>
+    <ConformedDims>
+        <DateTimeConformedDim>
+            <DateID grainLevel="1">
+                <Date></Date>
+                <DayOfYear></DayOfYear>
+                <DayOfMonth></DayOfMonth>
+                <WeekDay></WeekDay>
+            </DateID>
+            <MonthID grainLevel="2">
+                <Month></Month>
+                <MonthName></MonthName>
+            </MonthID>
+            <QuarterID grainLevel="3">
+                <Quarter></Quarter>
+            </QuarterID>
+            <YearID grainLevel="4">
+                <Year></Year>
+            </YearID>
+        </DateTimeConformedDim>
+        <SpaceConformedDim>
+            <SpaceID grainLevel="1">
+                <SpaceName></SpaceName>
+                <SpaceDescription></SpaceDescription>
+            </SpaceID>
+            <AreaID grainLevel="2">
+                <AreaName></AreaName>
+            </AreaID>
+        </SpaceConformedDim>
+        <MeasureConformedDim>
+            <MeasureID grainLevel="1">
+                <MeasureName></MeasureName>
+                <MeasureDescription></MeasureDescription>
+                <MeasureType></MeasureType>
+                <MeasureConstraints></MeasureConstraints>
+                <MeasureUnit></MeasureUnit>
+                <MeasureRely></MeasureRely>
+                <MeasureCalculateEquation></MeasureCalculateEquation>
+            </MeasureID>
+        </MeasureConformedDim>
+    </ConformedDims>
+    <ConformedFacts>
+        <FactID></FactID>
+        <FactName></FactName>
+        <FactType></FactType>
+        <MeasureGrain></MeasureGrain>
+        <SpaceGrain></SpaceGrain>
+        <TimeGrain></TimeGrain>
+        <FatherFactID></FatherFactID>
+        <FactFunction></FactFunction>
+    </ConformedFacts>
+</DataWarehouseModel>

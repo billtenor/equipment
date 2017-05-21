@@ -1,0 +1,362 @@
+{% extends 'cloudPlatform/base.html' %}
+
+{% block css %}
+    <!-- Bootstrap 3.3.6 -->
+    <link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="/static/dist/css/AdminLTE.min.css">
+    <!-- AdminLTE Skins. Choose a skin from the css/skins
+        folder instead of downloading all of them to reduce the load. -->
+    <link rel="stylesheet" href="/static/dist/css/skins/_all-skins.min.css">
+    <!-- Tagmanager CSS -->
+    <link rel="stylesheet" href="/static/typeahead.js/tagmanager.css">
+    <link rel="stylesheet" href="/static/typeahead.js/tagmanager.less">
+    <link rel="stylesheet" href="/static/typeahead.js/tagmanager.scss">
+    <link rel="stylesheet" href="/static/typeahead.js/examples.css">
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+{% endblock %}
+
+{% block content %}
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <h1>
+                需求
+            </h1>
+            <ol class="breadcrumb">
+                <li><a href="{% url 'index'%}"><i class="fa fa-home"></i> Home</a></li>
+                <!--li class="active">Dashboard</li-->
+            </ol>
+        </section>
+        <!-- DemandShow content -->
+        <section class="content">
+            <div class="row">
+                <div class="col-xs-12">
+                    <!-- modal -->
+                    <div class="modal fade" id="exampleModal1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                    <h3 class="modal-title" id="exampleModalLabel">New message</h3>
+                                </div>
+                                <form method="post" action="{% url 'DemandShow'%}">
+                                    <div class="modal-body">
+                                        <input type="hidden" class="db_method" name="db_method">
+                                        <input type="hidden" class="db_id" name="db_id">
+                                        <div class="row">
+                                            <div class="col-xs-12">
+                                                <p><strong>需求名称</strong></p>
+                                                <p><input type="text" class="fill_DemandName readOrWrite" name="new_DemandName"></p>
+                                                <p><strong>需求类型</strong></p>
+                                                <div class="dropdown" style="float:left;margin-left: 15px">
+                                                    <a class="dropdown-toggle tooltype-select-dropdown DemandType" data-toggle="dropdown">选择需求类型<span class="caret"></span></a>
+                                                    <ul class="dropdown-menu" role="menu">
+                                                        {% for i in DemandTypeList %}
+                                                            <li><a class="DemandTypeItem">{{ i.DemandTypeName }}</a></li>
+                                                        {% endfor %}
+                                                    </ul>
+                                                </div>
+                                                <input type="hidden" class="fill_DemandType" name="new_DemandType">
+                                                <br>
+                                                <br>
+                                                <p><strong>需求标签</strong></p>
+                                                <div class="tag-area">
+                                                </div>
+                                                <div class="tag-input-area input-for-add">
+                                                    <input type="text" class="typeahead typeahead-add input-medium tm-input tm-input-info" placeholder="Tags">
+                                                </div>
+                                                <input type="hidden" class="tag_list" name="tag_list">
+                                                <div class="timeIsHidden">
+                                                <p><strong>创建时间</strong></p>
+                                                <p><input type="text" class="fill_CreateTime" readonly="true" name="new_CreateTime"></p>
+                                                <p><strong>修改时间</strong></p>
+                                                <p><input type="text" class="fill_LastModifyTime" readonly="true" name="new_LastModifyTime"></p>
+                                                </div>
+                                                <p><strong>需求描述</strong></p>
+                                                <p><textarea style="width:550px;height:200px;overflow:scroll;overflow-x:hidden;overflow-y:hidden;resize:none;" class="fill_DemandDescrip readOrWrite" name="new_DemandDescrip"></textarea></p>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                                        <input type="submit" class="btn btn-info" id="make_sure">
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    <div class="box">
+                        <div class="box-header">
+                            <h3 class="box-title">需求</h3>
+                        </div>
+                        <!-- /.box-header -->
+                        <div class="box-body">
+                            <!-- Button trigger modal -->
+                            <button type="button" class="btn btn-info" name="db_add" data-toggle="modal" data-target="#exampleModal1" onclick="fill_modal(name)">
+                                <i class="fa fa-fw fa-plus-circle"></i>添加
+                            </button>
+                            {% if messages %}
+                                {% for message in messages %}
+                                    <p {% if message.tags %} class="{{ message.tags }}" {% endif %} style="padding: 10px" >{{ message }}</p>
+                                {% endfor %}
+                            {% endif %}
+                            <p></p>
+                            <table id="example2" class="table table-bordered table-hover">
+                                <thead>
+                                <tr>
+                                    <th>需求名称</th>
+                                    <th>需求类型</th>
+                                    <th>需求描述</th>
+                                    <th>创建时间</th>
+                                    <th>修改时间</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for i in data_list %}
+                                    <tr>
+                                        <td style="width:100px"  class="{{ i.DemandID }}">{{ i.DemandName }}</td>
+                                        <td style="width:100px"  class="{{ i.DemandID }}">{{ i.DemandType_DemandTypeID.DemandTypeName }}</td>
+                                        <td class="{{ i.DemandID }}"><div style="overflow:hidden;white-space: nowrap;width:200px;text-overflow:ellipsis">{{ i.DemandDescrip }}</div></td>
+                                        <td style="width:150px"  class="{{ i.DemandID }}">{{ i.CreateTime }}</td>
+                                        <td style="width:150px"  class="{{ i.DemandID }}">{{ i.LastModifyTime }}</td>
+                                        <td style="width:50px">
+                                            <form method="post" action="{% url 'demandtemplateShow' %}">
+                                                <input type="hidden" name="demandid" value="{{ i.DemandID }}">
+                                                <button type="submit" class="btn btn-info bg-orange" name="db_select {{ i.DemandID }}">
+                                                    <i class="fa fa-fw fa-search"></i>查看
+                                                </button>
+                                            </form>
+                                        </td>
+                                        <td style="width:50px">
+                                            <button type="button" class="btn btn-info bg-orange" name="db_modify {{ i.DemandID }}" data-toggle="modal" data-target="#exampleModal1" onclick="fill_modal(name)">
+                                                <i class="fa fa-fw fa-pencil"></i>修改
+                                            </button>
+                                        </td>
+                                        <td style="width:50px">
+                                            <button type="button" class="btn btn-info bg-orange" name="db_delete {{ i.DemandID }}" data-toggle="modal" data-target="#exampleModal1" onclick="fill_modal(name)">
+                                                <i class="fa fa-fw fa-trash"></i>删除
+                                            </button>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+{% endblock %}
+
+{% block js %}
+    <!-- jQuery 2.2.3 -->
+    <script src="/static/plugins/jQuery/jquery-2.2.3.min.js"></script>
+    <!-- jQuery UI 1.11.4 -->
+    <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
+    <!-- Bootstrap 3.3.6 -->
+    <script src="/static/bootstrap/js/bootstrap.min.js"></script>
+    <!-- jQuery Knob Chart -->
+    <script src="/static/plugins/knob/jquery.knob.js"></script>
+    <!-- AdminLTE App -->
+    <script src="/static/dist/js/app.min.js"></script>
+    <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+    <script src="/static/dist/js/pages/dashboard.js"></script>
+    <!-- AdminLTE for demo purposes -->
+    <script src="/static/dist/js/demo.js"></script>
+    <!-- Typeahead -->
+    <script src="/static/typeahead.js/typeahead.bundle.min.js"></script>
+    <!-- Tagmanager -->
+    <script src="/static/typeahead.js/tagmanager.js"></script>
+
+    <script charset="UTF-8">
+        var all_tool_tags;
+        var tags_has_selectedtype = [];
+        var tagtype_typeahead;
+        function tagtype_typeaheadDefaults(q, sync) {
+            if (q === '') {
+                sync(tagtype_typeahead.get(tags_has_selectedtype));
+            }
+
+            else {
+                tagtype_typeahead.search(q, sync);
+            }
+        }
+        (function(){
+            $.ajax({
+                type: 'POST',
+                url: '/cloud/getTags',
+                datatype: 'json',
+                async: false,
+                success: function (result) {
+                    result = JSON.parse(result);
+                    for(var i = 0; i < result.length; i++){
+                        tags_has_selectedtype.push(result[i].TagLabel);
+                        tagtype_typeahead = new Bloodhound({
+                            datumTokenizer: Bloodhound.tokenizers.whitespace,
+                            queryTokenizer: Bloodhound.tokenizers.whitespace,
+                            local: tags_has_selectedtype
+                        });
+                        tagtype_typeahead.initialize();
+                    }
+                }
+            })
+        })()
+    </script>
+
+    <script charset="UTF-8">
+        (function(){
+            $.ajax({
+                type: 'POST',
+                url: '/cloud/getDemandTags',
+                datatype: 'json',
+                async: false,
+                success: function (result) {
+                    all_tool_tags = JSON.parse(result);
+                }
+            });
+        })();
+    </script>
+
+    <script charset="UTF-8">
+        var method_name = '';
+        var data_id = '';
+        var form_content = [];
+    </script>
+
+    <script charset="UTF-8">
+        $(".DemandTypeItem").click(function () {
+            $(".DemandType").html($(this).text()+'<span class="caret"></span>');
+            $(".fill_DemandType").val($(this).text())});
+    </script>
+
+    <!-- make sure the modal's content and title-->
+    <script charset="UTF-8">
+        function fill_modal(method_name_id) {
+            var typeahead_tagsManager;
+            $(".DemandType").attr("data-toggle", "dropdown");
+            method_name = method_name_id.split(" ")[0];
+            data_id = method_name_id.split(" ")[1];
+            var i = 0;
+            $("."+data_id).each(function() {
+                form_content[i] = $(this).text();
+                i++;
+            })
+            $("#make_sure").show();
+            $(".readOrWrite").removeAttr("readOnly");
+            $('.tag-area').show();
+            $('.tag-input-area').show();
+            $('.timeIsHidden').show();
+            switch (method_name) {
+                case "db_add":
+                    $(".db_method").val("db_add");
+                    $("#exampleModalLabel").text("添加");
+                    $("#make_sure").val("添加");
+                    $('.timeIsHidden').hide();
+                    $(".DemandType").html('选择需求类型<span class="caret"></span>');
+                    $('.tag_list').val('');
+                    $('.tag-area').hide();
+                    $(".tag-input-area").empty();
+                    $(".tag-input-area").append('<input type="text" class="typeahead typeahead-add input-medium tm-input tm-input-info" placeholder="Tags">');
+                    typeahead_tagsManager = $('.typeahead').tagsManager();
+                    $('.typeahead').typeahead({
+                                minLength: 0,
+                                highlight: true
+                            },
+                            {
+                                name: 'all-tags',
+                                limit: tags_has_selectedtype.length,
+                                source: tagtype_typeaheadDefaults
+                            }).on('typeahead:selected', function (e, d) {
+                        typeahead_tagsManager.tagsManager("pushTag", d);
+                    });
+                    $(".typeahead").on('tm:refresh', function(e, taglist) {
+                        $('.tag_list').val(taglist);
+                    });
+                    form_content = [];
+                    break;
+                case "db_delete":
+                    $(".db_method").val("db_delete");
+                    $(".db_id").val(data_id);
+                    $("#exampleModalLabel").text("删除");
+                    $("#make_sure").val("确认删除");
+                    $(".readOrWrite").attr("readOnly", "true");
+                    $(".DemandType").text(form_content[1]);
+                    $(".DemandType").removeAttr("data-toggle");
+                    $('.tag-input-area').hide();
+                    $('.tag-area').hide();
+                    $('.tag_list').val(all_tool_tags[data_id].toString());
+                    for(i = 0; i < all_tool_tags[data_id].length; i++) {
+                        $('.tag-area').append('<span class="tm-tag-info">'+all_tool_tags[data_id][i]+'</span>')
+                    }
+                    break;
+                case "db_modify":
+                    $(".db_method").val("db_modify");
+                    $(".db_id").val(data_id);
+                    $("#exampleModalLabel").text("修改");
+                    $("#make_sure").val("确认修改");
+                    $('.timeIsHidden').hide();
+                    $(".DemandType").html(form_content[1]+'<span class="caret"></span>');
+                    $('.tag-area').hide();
+                    $(".tag-input-area").empty();
+                    $(".tag-input-area").append('<input type="text" class="typeahead typeahead-add input-medium tm-input tm-input-info" placeholder="Tags">');
+                    typeahead_tagsManager = $('.typeahead').tagsManager();
+                    $(".typeahead").on('tm:refresh', function(e, taglist) {
+                        $('.tag_list').val(taglist);
+                    });
+                    for(i = 0; i < all_tool_tags[data_id].length; i++) {
+                        $('.typeahead').tagsManager('pushTag', all_tool_tags[data_id][i]);
+                    }
+                    $('.typeahead').typeahead({
+                                minLength: 0,
+                                highlight: true
+                            },
+                            {
+                                name: 'all-tags',
+                                limit: tags_has_selectedtype.length,
+                                source: tagtype_typeaheadDefaults
+                            }).on('typeahead:selected', function (e, d) {
+                        typeahead_tagsManager.tagsManager("pushTag", d);
+                    });
+                    break;
+                case "db_select":
+                    $(".db_select").val("db_select");
+                    $("#exampleModalLabel").text("查看");
+                    $("#make_sure").hide();
+                    $(".readOrWrite").attr("readOnly", "true");
+                    $(".DemandType").text(form_content[1]);
+                    $(".DemandType").removeAttr("data-toggle");
+                    $('.tag-input-area').hide();
+                    $('.tag-area').empty();
+                    $('.tag_list').val(all_tool_tags[data_id].toString());
+                    for(i = 0; i < all_tool_tags[data_id].length; i++) {
+                        $('.tag-area').append('<span class="tm-tag tm-tag-info">'+all_tool_tags[data_id][i]+'</span>')
+                    }
+                    break;
+            }
+
+            $(".fill_DemandName").val(form_content[0]);
+            $(".fill_DemandType").val(form_content[1]);
+            $(".fill_DemandDescrip").val(form_content[2]);
+            $(".fill_CreateTime").val(form_content[3]);
+            $(".fill_LastModifyTime").val(form_content[4]);
+
+        }
+    </script>
+
+{% endblock %}

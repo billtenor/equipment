@@ -1,0 +1,22 @@
+{
+  "zkConnString": "192.168.100.12:2181,192.168.100.13:2181,192.168.100.14:2181",
+  "zkKafkaPrefix": "/kafka/q-bfieenlo",
+  "topicName": "test",
+  "kafkaBrokerHosts": "192.168.100.77:9092,192.168.100.76:9092",
+  "topologyName": "performanceTestConsumer",
+  "NumWorkers": 10,
+  "topologyConfig": {
+    "dataWarehouseModelID": "performanceTest",
+    "dataSourceModelID": "performanceTest_SORSE",
+    "dataModelID": "performanceTest_DATA_01",
+    "factsTableIDs":["performanceTest_FACT_01"],
+    "spaceAggregateWaitTime":750,
+    "noBlockTimeVPT":30000,
+    "parallel_spout":10,
+    "parallel_transform":10,
+    "parallel_aggregate":3,
+    "parallel_save":10,
+    "dataSaveWindowCount":30,
+    "dataSaveRetryCount":3
+  }
+}

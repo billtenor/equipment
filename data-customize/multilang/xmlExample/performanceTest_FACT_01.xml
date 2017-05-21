@@ -1,0 +1,8 @@
+<DataModelFactsTable>
+    <DataModelID>performanceTest_DATA_01</DataModelID>
+    <DataModelFactsTableID>performanceTest_FACT_01</DataModelFactsTableID>
+    <FactIDs factSize = "2">
+    	<factID>2</factID>
+        <factID>1</factID>
+    </FactIDs>
+</DataModelFactsTable>

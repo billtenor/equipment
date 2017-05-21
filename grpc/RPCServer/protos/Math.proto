@@ -1,0 +1,8 @@
+syntax = "proto3";
+package tools;
+service Math {
+  rpc sum(SerializedIOStream) returns (SerializedIOStream){}
+}
+message SerializedIOStream {
+  bytes bytes = 1;
+}

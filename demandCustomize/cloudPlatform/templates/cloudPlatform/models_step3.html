@@ -1,0 +1,430 @@
+{% extends 'evaluation/base.html' %}
+
+{% block css %}
+  <!-- Bootstrap 3.3.6 -->
+  <link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
+  <!-- Ionicons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
+  <!-- DataTables -->
+  <link rel="stylesheet" href="/static/plugins/datatables/dataTables.bootstrap.css">
+  <!-- iCheck for checkboxes and radio inputs -->
+  <link rel="stylesheet" href="/static/plugins/iCheck/all.css">
+  <!-- validator -->
+  <link rel="stylesheet" href="/static/plugins/bootstrap-validator/bootstrapValidator.min.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="/static/dist/css/AdminLTE.min.css">
+  <!-- AdminLTE Skins. Choose a skin from the css/skins
+       folder instead of downloading all of them to reduce the load. -->
+  <link rel="stylesheet" href="/static/dist/css/skins/_all-skins.min.css">
+
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+  <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+  <![endif]-->
+{% endblock %}
+
+{% block content %}
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>
+        云制造可信评价工具平台
+      </h1>
+      <ol class="breadcrumb">
+        <li><a href="{% url 'index' %}"><i class="fa fa-home"></i> Home</a></li>
+        <li class="active">评价模型管理</li>
+      </ol>
+    </section>
+  
+    <!-- Main content -->
+    <section class="content">
+      <div class="row">
+        <div class="col-xs-12">
+          <div class="box box-success box-solid">
+            <div class="box-header">
+              <h3 class="box-title">step3: 定制服务主体通用评价指标</h3>
+              <div class="box-tools pull-right">
+                  <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i> </button>
+              </div>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+              <form id="select_general_metrics" method="post">
+                <table id="subject_general_metric_list" class="table table-bordered table-striped">
+                  <thead>
+                  <tr>
+                    <th>术语名称</th>
+                    <th>适合资源类型/所属服务类型</th>
+                    <th>通用指标抽象描述</th>
+                    <th>定量/定性</th>
+                    <th>选择</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  {% for metric in subject_general_metric_list %}
+                  <tr>
+                    <td>{{metric.name|slice:"1:"}}</td>
+                    <td>
+                    {% if metric.manufacturing_resource == 0 %}
+                    软制造资源指标
+                    {% elif metric.manufacturing_resource == 1 %}
+                    硬制造资源指标
+                    {% else %}
+                    软制造资源和硬制造资源指标
+                    {% endif %}
+                    </td>
+                    <td>
+                    {{metric.abstract_desc}} 
+                    </td>
+                    <td>
+                    {% if metric.is_quantitative %} 定量 {% else %} 定性 {% endif %}
+                    </td>
+                    <td><label>
+                      <input type="checkbox" class="flat-green" id="select_general{{forloop.counter}}" name="select_general{{forloop.counter}}" value="{{metric.name}}">
+                    </label></td>
+                  </tr>
+                  {% endfor %}
+                  </tbody>
+                  <tfoot>
+                  <tr>
+                    <th>术语名称</th>
+                    <th>适合资源类型/所属服务类型</th>
+                    <th>通用指标抽象描述</th>
+                    <th>定量/定性</th>
+                    <th>选择</th>
+                  </tr>
+                  </tfoot>
+                </table>
+              </form>
+              <!-- buttons -->
+              <div class="col-xs-12">
+                <div class="box">
+                  <div class="box-header">
+                    <h4 class="box-title">常用操作</h4>
+                  </div>
+                  <!-- /.box-header -->
+                  <div class="box-body">
+                    <div class="btn-group">
+                      <button type="button" class="btn btn-info" onclick="fastOperation('general','select','all')">选择所有指标</button>
+                      <button type="button" class="btn btn-danger" onclick="fastOperation('general','cancel','all')">取消选择所有指标</button>
+                    </div>
+                  </div>
+                  <!-- /.box-body -->
+                </div>
+                <!-- /.box -->
+              </div>
+              <!-- /.buttons -->
+            </div>
+            <!-- /.box-body -->
+          </div>
+          <!-- /.box -->
+        </div>
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
+
+      <div class="row">
+        <div class="col-xs-12">
+          <div class="box box-success box-solid">
+            <div class="box-header">
+              <h3 class="box-title">step4: 输入模型名称</h3>
+              <div class="box-tools pull-right">
+                  <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i> </button>
+              </div>
+            </div>
+            <!-- /.box-header -->
+            <form id="model_name_form">
+              <div class="box-body">
+                <div id="name_form" class="form-group">
+                  <input type="text" class="form-control" id="model_name" name="model_name" placeholder="在此输入模型名称">
+                  <input type="hidden" id="instance_metrics" name="instance_metrics" value={{instance_metrics}}>
+                  <input type="hidden" id="product_metrics" name="product_metrics" value={{product_metrics}}>
+                  <input type="hidden" id="subject_metrics" name="subject_metrics">
+                </div>
+              </div>
+              <!-- /.box-body -->
+            </form>
+          </div>
+          <!-- /.box -->
+        </div>
+      </div> 
+
+      <div class="row">
+        <div class="col-xs-2 col-md-offset-5">
+          <button class="btn btn-primary" onclick="SubmitData()">保存!</button>
+        </div>
+      </div>
+    </section>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+{% endblock %}
+
+{% block js %}
+<!-- jQuery 2.2.3 -->
+<script src="/static/plugins/jQuery/jquery-2.2.3.min.js"></script>
+<!-- Bootstrap 3.3.6 -->
+<script src="/static/bootstrap/js/bootstrap.min.js"></script>
+<!-- DataTables -->
+<script src="/static/plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="/static/plugins/datatables/dataTables.bootstrap.min.js"></script>
+<!-- SlimScroll -->
+<script src="/static/plugins/slimScroll/jquery.slimscroll.min.js"></script>
+<!-- FastClick -->
+<script src="/static/plugins/fastclick/fastclick.js"></script>
+<!-- iCheck 1.0.1 -->
+<script src="/static/plugins/iCheck/icheck.min.js"></script>
+<!-- validator -->
+<script src="/static/plugins/bootstrap-validator/bootstrapValidator.min.js"></script>
+<!-- AdminLTE App -->
+<script src="/static/dist/js/app.min.js"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="/static/dist/js/demo.js"></script>
+<!-- page script -->
+<script>
+  // datatables
+  $(function () {
+    $("#subject_general_metric_list").DataTable( {
+      "aaSorting": [[ 1, "desc" ]] 
+     } );
+  });
+
+  // iCheck for checkbox and radio inputs
+  $('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
+    checkboxClass: 'icheckbox_minimal-blue',
+    radioClass: 'iradio_minimal-blue'
+  });
+  //Flat red color scheme for iCheck
+  $('input[type="checkbox"].flat-green, input[type="radio"].flat-green').iCheck({
+    checkboxClass: 'icheckbox_flat-green',
+    radioClass: 'iradio_flat-green'
+  });
+
+  // model name validation
+  (function($) {
+    $.fn.bootstrapValidator.validators.name_exist = {
+      /**
+       * @param {BootstrapValidator} validator The validator plugin instance
+       * @param {jQuery} $field The jQuery object represents the field element
+       * @param {Object} options The validator options
+       * @returns {boolean}
+       */
+      validate: function(validator, $field, options) {
+        // You can get the field value
+        var value = $field.val();
+        var _json = jQuery.param({"name": value})
+        var is_valid = false;
+        // Perform validating
+        $.ajax({
+          type:"POST" ,
+          url:"checkname",
+          data:_json ,
+          cache: false,
+          async: false,
+          dataType: "json",
+          success: function(result) {
+            if (result == 1) {
+              is_valid = true;
+            }
+          }
+        });
+        return is_valid;
+        // return true if the field value is valid otherwise return false
+      }
+    };
+  }(window.jQuery));
+
+  $(document).ready(function(){
+    $('#model_name_form').bootstrapValidator({
+      feedbackIcons: {
+        valid: 'glyphicon glyphicon-ok',
+        invalid: 'glyphicon glyphicon-remove',
+        validating: 'glyphicon glyphicon-refresh',
+      },
+      fields: {
+        model_name: {
+          validators: {
+            notEmpty: { message: '模型名称不能为空!' },
+            name_exist: { message: '模型名称已存在，请更换其它名称!' },
+          },
+        },
+      },
+    });
+  });
+
+  // fast check and uncheck
+  function fastOperation(metric_type,operator,region) {
+    if (metric_type == "general") {
+      $('#subject_general_metric_list').on('draw.dt', function () {
+        iCheckOperation(metric_type,operator,region);
+      });
+      $("#subject_general_metric_list").DataTable().draw('full-hold');
+    } else if (metric_type == "specific") {
+      $('#subject_specific_metric_list').on('draw.dt', function () {
+        iCheckOperation(metric_type,operator,region);
+      });
+      $("#subject_specific_metric_list").DataTable().draw('full-hold');
+    } else {
+      alert('invalid function parameter.') 
+    }
+  }
+        
+  function iCheckOperation(metric_type,operator,region) {
+    if (metric_type == "general") {
+      var general_metrics_table = $("#subject_general_metric_list").DataTable();
+      var rows = general_metrics_table.rows()[0].length;
+      switch(operator) {
+        case 'select':
+          var compareString; 
+          for (var i=1; i<=rows; i++) {
+            switch(region) {
+              case 'all':
+                //$('#select_general'+i).iCheck('check');
+                compareString = "null";
+                break;
+              case 'hard':
+                compareString = "软制造资源指标";
+                break;
+              case 'soft':
+                compareString = "硬制造资源指标";
+                break;
+            }  
+            if (general_metrics_table.cell(i-1,1).render('display') != compareString) {
+              $('#select_general'+i).iCheck('check');
+            }
+          }
+          break;  
+        case 'cancel':
+          var compareString; 
+          for (var i=1; i<=rows; i++) {
+            switch(region) {
+              case 'all':
+                $('#select_general'+i).iCheck('uncheck');
+                compareString = "null";
+                break;
+              case 'hard':
+                compareString = "硬制造资源指标";
+                break;
+              case 'soft':
+                compareString = "软制造资源指标";
+                break;
+            }  
+            if (general_metrics_table.cell(i-1,1).render('display') != compareString) {
+              $('#select_general'+i).iCheck('uncheck');
+            }
+          }
+          break;
+      }
+    } else if (metric_type == "specific") {
+      var specific_metrics_table = $("#subject_specific_metric_list").DataTable();
+      var rows = specific_metrics_table.rows()[0].length;
+      switch(operator) {
+        case 'select':
+          var compareString; 
+          for (var i=1; i<=rows; i++) {
+            switch(region) {
+              case 'development':
+                compareString = "研发设计";
+                break;
+              case 'manufacturing':
+                compareString = "生产加工";
+                break;
+              case 'simulation':
+                compareString = "仿真实验";
+                break;
+              case 'maintenance':
+                compareString = "维修维护";
+                break;
+              case 'management':
+                compareString = "经营管理";
+                break;
+            }  
+            if (specific_metrics_table.cell(i-1,1).render('display') == compareString) {
+              $('#select_specific'+i).iCheck('check');
+            }
+          }
+          break;  
+        case 'cancel':
+          var compareString; 
+          for (var i=1; i<=rows; i++) {
+            switch(region) {
+              case 'all':
+                $('#select_specific'+i).iCheck('uncheck');
+                compareString = "null";
+                break;
+              case 'hard':
+                compareString = "硬制造资源指标";
+                break;
+              case 'soft':
+                compareString = "软制造资源指标";
+                break;
+            }  
+            if (specific_metrics_table.cell(i-1,1).render('display') != compareString) {
+              $('#select_specific'+i).iCheck('uncheck');
+            }
+          }
+          break;
+      }
+    }
+  }
+
+  // submit button
+  function SubmitData() {
+    var general_metric_data = ""; 
+    var general_metrics_table = $("#subject_general_metric_list").DataTable();
+    var pages = general_metrics_table.page.info().pages;
+    for (var j=0; j<pages; j++) {
+      $("#subject_general_metric_list").DataTable().page(j).draw('page');
+      for (var i=1; i<= {{ subject_general_metric_list|length }}; i++) {
+        if ($('#select_general'+i).is(':checked')) {
+          general_metric_data += document.getElementById('select_general'+i).value; 
+          general_metric_data += ";"
+        }
+      }
+    }
+    document.getElementById('subject_metrics').value = general_metric_data;
+    // submit to database
+    var is_successful;
+
+    //<input type="text" class="form-control" id="model_name" name="model_name" placeholder="在此输入模型名称">
+    //<input type="hidden" id="instance_metrics" name="instance_metrics">
+    //<input type="hidden" id="product_metrics" name="product_metrics">
+    //<input type="hidden" id="subject_metrics" name="subject_metrics">
+    var instance_metrics = document.getElementById('instance_metrics').value;
+    var product_metrics = document.getElementById('product_metrics').value;
+    var subject_metrics = document.getElementById('subject_metrics').value;
+    var model_name = document.getElementById('model_name').value;
+    var _json = jQuery.param({'model_name':model_name,'instance_metrics':instance_metrics,'product_metrics':product_metrics,'subject_metrics':subject_metrics});
+    $.ajax({
+      type:"POST" ,
+      url:"save",
+      data:_json ,
+      cache: false,
+      async: false,
+      dataType: "json",
+      success: function(result) {
+        if (result == 1) {
+          is_successful = true;
+        } else {
+          is_successful = false;
+        }
+      }
+    });
+
+    if (is_successful){
+      alert("创建模型成功!");
+      window.location.href = "{% url 'models' %}";
+    } else {
+      alert("创建模型失败!");
+    }
+  }
+
+</script>
+{% endblock %}
+
+

@@ -1,0 +1,9 @@
+<DataSourceModel>
+    <DataWarehouseModelID>performanceTest</DataWarehouseModelID>
+    <DataGapTime>1000</DataGapTime>
+    <DataLifeTime>0</DataLifeTime>
+    <MeasureIDTable>
+    </MeasureIDTable>
+    <SpaceIDTable>
+    </SpaceIDTable>
+</DataSourceModel>

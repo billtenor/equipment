@@ -1,0 +1,264 @@
+{% extends 'evaluation/base.html' %}
+
+{% block css %}
+  <!-- Bootstrap 3.3.6 -->
+  <link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
+  <!-- Ionicons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
+  <!-- DataTables -->
+  <link rel="stylesheet" href="/static/plugins/datatables/dataTables.bootstrap.css">
+  <!-- iCheck for checkboxes and radio inputs -->
+  <link rel="stylesheet" href="/static/plugins/iCheck/all.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="/static/dist/css/AdminLTE.min.css">
+  <!-- AdminLTE Skins. Choose a skin from the css/skins
+       folder instead of downloading all of them to reduce the load. -->
+  <link rel="stylesheet" href="/static/dist/css/skins/_all-skins.min.css">
+
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+  <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+  <![endif]-->
+{% endblock %}
+
+{% block content %}
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>
+        云制造可信评价工具平台
+      </h1>
+      <ol class="breadcrumb">
+        <li><a href="{% url 'index' %}"><i class="fa fa-home"></i> Home</a></li>
+        <li class="active">评价模型管理</li>
+      </ol>
+    </section>
+  
+    <!-- Main content -->
+    <section class="content">
+      <div class="row">
+        <div class="col-xs-12">
+          <div class="box box-success box-solid">
+            <div class="box-header">
+              <h3 class="box-title">step1.1: 定制服务实例通用评价指标</h3>
+              <div class="box-tools pull-right">
+                  <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i> </button>
+              </div>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+              <div id="general_metric_tree"></div>
+            </div>
+            <!-- /.box-body -->
+          </div>
+          <!-- /.box -->
+        </div>
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
+
+      <div class="row">
+        <div class="col-xs-12">
+          <div class="box box-success box-solid">
+            <div class="box-header">
+              <h3 class="box-title">step1.2: 定制服务实例特有评价指标</h3>
+              <div class="box-tools pull-right">
+                  <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i> </button>
+              </div>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+              <div id="specific_metric_tree"></div>
+            </div>
+            <!-- /.box-body -->
+          </div>
+          <!-- /.box -->
+        </div>
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
+
+      <div class="row">
+        <div class="col-xs-2 col-md-offset-5">
+          <form id="select_metrics" method="post" name="select_metrics" action="{% url 'model2' %}?template={{template}}">
+            <input type="hidden" id="general_metric_data" name="general_metric_data" >
+            <input type="hidden" id="specific_metric_data" name="specific_metric_data" >
+            <button type="button" class="btn btn-block btn-primary" onclick="SubmitData()">下一步</button>
+          </form>
+        </div>
+      </div> 
+    </section>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+{% endblock %}
+
+{% block js %}
+<!-- jQuery 2.2.3 -->
+<script src="/static/plugins/jQuery/jquery-2.2.3.min.js"></script>
+<!-- Bootstrap 3.3.6 -->
+<script src="/static/bootstrap/js/bootstrap.min.js"></script>
+<!-- DataTables -->
+<script src="/static/plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="/static/plugins/datatables/dataTables.bootstrap.min.js"></script>
+<!-- SlimScroll -->
+<script src="/static/plugins/slimScroll/jquery.slimscroll.min.js"></script>
+<!-- FastClick -->
+<script src="/static/plugins/fastclick/fastclick.js"></script>
+<!-- iCheck 1.0.1 -->
+<script src="/static/plugins/iCheck/icheck.min.js"></script>
+<!-- bootstrap-treeview -->
+<script src="/static/plugins/bootstrap-treeview/bootstrap-treeview.min.js"></script>
+<!-- AdminLTE App -->
+<script src="/static/dist/js/app.min.js"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="/static/dist/js/demo.js"></script>
+<!-- page script -->
+<script>
+  var defaultData = [{
+    text: 'Parent 1',
+    href: '#parent1',
+    tags: ['4'],
+    nodes: [{
+      text: 'Child 1',
+      href: '#child1',
+      tags: ['2'],
+      nodes: [{
+          text: 'Grandchild 1',
+          href: '#grandchild1',
+          tags: ['0']
+        },
+        {
+          text: 'Grandchild 2',
+          href: '#grandchild2',
+          tags: ['0']
+        }]
+    },
+    {
+      text: 'Child 2',
+      href: '#child2',
+      tags: ['0']
+    }]
+  },
+  {
+    text: 'Parent 2',
+    href: '#parent2',
+    tags: ['0']
+  },
+  {
+    text: 'Parent 3',
+    href: '#parent3',
+     tags: ['0']
+  },
+  {
+    text: 'Parent 4',
+    href: '#parent4',
+    tags: ['0']
+  },
+  {
+    text: 'Parent 5',
+    href: '#parent5',
+    tags: ['0']
+  }];
+
+  var generalMetricData = {{instance_general_metric_json_string}};
+  var specificMetricData = {{instance_specific_metric_json_string}};
+  // general_metric_tree
+  $('#general_metric_tree').treeview({
+    color: "#428bca",
+    data: generalMetricData,
+    levels: 1,
+    showIcon: false,
+    showCheckbox: true,
+    showTags: true,
+    multiSelect: true, 
+    onNodeChecked: function(event, node) {
+      if (typeof node['nodes'] != "undefined") {
+        var children = node['nodes'];
+        for (var i=0; i<children.length; i++) {
+          $(this).treeview('checkNode', [children[i].nodeId, { silent: true } ]);
+        }
+      } 
+    },
+    onNodeUnchecked: function(event, node) {
+      if (typeof node['nodes'] != "undefined") {
+        var children = node['nodes'];
+        for (var i=0; i<children.length; i++) {
+          $(this).treeview('uncheckNode', [children[i].nodeId, { silent: true } ]);
+        }
+      } 
+    },
+  });
+
+  // specific_metric_tree
+  $('#specific_metric_tree').treeview({
+    color: "#428bca",
+    data: specificMetricData,
+    levels: 1,
+    showIcon: false,
+    showCheckbox: true,
+    showTags: true,
+    multiSelect: true, 
+    onNodeChecked: function(event, node) {
+      if (typeof node['nodes'] != "undefined") {
+        var children = node['nodes'];
+        for (var i=0; i<children.length; i++) {
+          $(this).treeview('checkNode', [children[i].nodeId, { silent: true } ]);
+        }
+      } 
+    },
+    onNodeUnchecked: function(event, node) {
+      if (typeof node['nodes'] != "undefined") {
+        var children = node['nodes'];
+        for (var i=0; i<children.length; i++) {
+          $(this).treeview('uncheckNode', [children[i].nodeId, { silent: true } ]);
+        }
+      } 
+    },
+  });
+
+  // iCheck for checkbox and radio inputs
+  $('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
+    checkboxClass: 'icheckbox_minimal-blue',
+    radioClass: 'iradio_minimal-blue'
+  });
+  // Flat red color scheme for iCheck
+  $('input[type="checkbox"].flat-green, input[type="radio"].flat-green').iCheck({
+    checkboxClass: 'icheckbox_flat-green',
+    radioClass: 'iradio_flat-green'
+  });
+
+  // submit button
+  function SubmitData() {
+    function getChecked(targetTree) {
+      var resultString = "";
+      var checkedList = targetTree.getChecked();
+      for (var i=0; i < checkedList.length; i++) {
+        var node = checkedList[i];
+        if (node.leaf) {
+          resultString += ("0" + node.text);
+          resultString += ";";
+        }
+      }
+      return resultString;
+    }
+
+    var general_metric_tree = $("#general_metric_tree").treeview(true);
+    var specific_metric_tree = $('#specific_metric_tree').treeview(true);
+    var general_metric_data = getChecked(general_metric_tree);
+    var specific_metric_data = getChecked(specific_metric_tree); 
+    document.getElementById('general_metric_data').value = general_metric_data;
+    document.getElementById('specific_metric_data').value = specific_metric_data;
+    document.getElementById("select_metrics").submit(); 
+  }
+
+</script>
+{% endblock %}
+
+
+

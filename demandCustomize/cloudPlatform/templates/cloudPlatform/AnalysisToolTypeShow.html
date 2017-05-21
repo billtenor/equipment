@@ -1,0 +1,197 @@
+{% extends 'cloudPlatform/base.html' %}
+
+{% block css %}
+    <!-- Bootstrap 3.3.6 -->
+    <link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="/static/dist/css/AdminLTE.min.css">
+    <!-- AdminLTE Skins. Choose a skin from the css/skins
+        folder instead of downloading all of them to reduce the load. -->
+    <link rel="stylesheet" href="/static/dist/css/skins/_all-skins.min.css">
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+{% endblock %}
+
+{% block content %}
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <h1>
+                分析工具类型
+            </h1>
+            <ol class="breadcrumb">
+                <li><a href="{% url 'index'%}"><i class="fa fa-home"></i> Home</a></li>
+                <!--li class="active">Dashboard</li-->
+            </ol>
+        </section>
+        <!-- AnalysisToolTypeShow content -->
+        <section class="content">
+            <div class="row">
+                <div class="col-xs-12">
+                    <!-- modal -->
+                    <div class="modal fade" id="exampleModal1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                    <h3 class="modal-title" id="exampleModalLabel">New message</h3>
+                                </div>
+                                <form method="post" action="{% url 'AnalysisToolTypeShow'%}">
+                                    <div class="modal-body">
+                                        <input type="hidden" class="db_method" name="db_method">
+                                        <input type="hidden" class="db_id" name="db_id">
+                                        <div class="row">
+                                            <div class="col-xs-12">
+                                                <p class="box-body"></p>
+                                                <p><strong>分析工具类型名称</strong></p>
+                                                <p><input type="text" class="fill_TypeName readOrWrite" name="new_TypeName"></p>
+                                                <p><strong>分析工具类型描述</strong></p>
+                                                <p><textarea style="width:550px;height:200px;overflow:scroll;overflow-x:hidden;overflow-y:hidden;resize:none;" class="fill_TypeDescrip readOrWrite" name="new_TypeDescrip"></textarea></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                                        <input type="submit" class="btn btn-info" id="make_sure">
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    <div class="box">
+                        <div class="box-header">
+                            <h3 class="box-title">分析工具类型</h3>
+                        </div>
+                        <!-- /.box-header -->
+                        <div class="box-body">
+                            <!-- Button trigger modal -->
+                            <button type="button" class="btn btn-info" name="db_add" data-toggle="modal" data-target="#exampleModal1" onclick="fill_modal(name)">
+                                <i class="fa fa-fw fa-plus-circle"></i>添加
+                            </button>
+                            {% if messages %}
+                                {% for message in messages %}
+                                    <p {% if message.tags %} class="{{ message.tags }}" {% endif %} style="padding: 10px" >{{ message }}</p>
+                                {% endfor %}
+                            {% endif %}
+                            <p></p>
+                            <table id="example2" class="table table-bordered table-hover">
+                                <thead>
+                                <tr>
+                                    <th>分析工具类型名称</th>
+                                    <th>分析工具类型描述</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for i in data_list %}
+                                    <tr>
+                                        <td style="width:200px" class="{{ i.AnalysisToolTypeID }}">{{ i.AnalysisToolTypeName }}</td>
+                                        <td class="{{ i.AnalysisToolTypeID }}"><div style="overflow:hidden;white-space: nowrap;width:400px;text-overflow:ellipsis">{{ i.AnalysisToolTypeDescrip }}</div></td>
+                                        <td style="width:50px">
+                                            <button type="button" class="btn btn-info bg-orange" name="db_select {{ i.AnalysisToolTypeID }}" data-toggle="modal" data-target="#exampleModal1" onclick="fill_modal(name)">
+                                                <i class="fa fa-fw fa-search"></i>查看
+                                            </button>
+                                        </td>
+                                        <td style="width:50px">
+                                            <button type="button" class="btn btn-info bg-orange" name="db_modify {{ i.AnalysisToolTypeID }}" data-toggle="modal" data-target="#exampleModal1" onclick="fill_modal(name)">
+                                                <i class="fa fa-fw fa-pencil"></i>修改
+                                            </button>
+                                        </td>
+                                        <td style="width:50px">
+                                            <button type="button" class="btn btn-info bg-orange" name="db_delete {{ i.AnalysisToolTypeID }}" data-toggle="modal" data-target="#exampleModal1" onclick="fill_modal(name)">
+                                                <i class="fa fa-fw fa-trash"></i>删除
+                                            </button>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+{% endblock %}
+
+{% block js %}
+    <!-- jQuery 2.2.3 -->
+    <script src="/static/plugins/jQuery/jquery-2.2.3.min.js"></script>
+    <!-- jQuery UI 1.11.4 -->
+    <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
+    <!-- Bootstrap 3.3.6 -->
+    <script src="/static/bootstrap/js/bootstrap.min.js"></script>
+    <!-- jQuery Knob Chart -->
+    <script src="/static/plugins/knob/jquery.knob.js"></script>
+    <!-- AdminLTE App -->
+    <script src="/static/dist/js/app.min.js"></script>
+    <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+    <script src="/static/dist/js/pages/dashboard.js"></script>
+    <!-- AdminLTE for demo purposes -->
+    <script src="/static/dist/js/demo.js"></script>
+
+    <script charset="UTF-8">
+        var method_name = '';
+        var data_id = '';
+        var form_content = [];
+    </script>
+    <!-- make sure the modal's content and title-->
+    <script charset="UTF-8">
+        function fill_modal(method_name_id) {
+            method_name = method_name_id.split(" ")[0];
+            data_id = method_name_id.split(" ")[1];
+            var i = 0;
+            $("."+data_id).each(function() {
+                form_content[i] = $(this).text();
+                i++;
+            })
+            $("#make_sure").show();
+            $(".readOrWrite").removeAttr("readOnly");
+            switch (method_name) {
+                case "db_add":
+                    $(".db_method").val("db_add");
+                    $("#exampleModalLabel").text("添加");
+                    $("#make_sure").val("确认");
+                    form_content = [];
+                    break;
+                case "db_delete":
+                    $(".db_method").val("db_delete");
+                    $(".db_id").val(data_id);
+                    $("#exampleModalLabel").text("删除");
+                    $("#make_sure").val("确认删除");
+                    $(".readOrWrite").attr("readOnly", "true");
+                    break;
+                case "db_modify":
+                    $(".db_method").val("db_modify");
+                    $(".db_id").val(data_id);
+                    $("#exampleModalLabel").text("修改");
+                    $("#make_sure").val("确认修改");
+                    break;
+                case "db_select":
+                    $(".db_select").val("db_select");
+                    $("#exampleModalLabel").text("查看");
+                    $("#make_sure").hide();
+                    $(".readOrWrite").attr("readOnly", "true");
+                    break;
+            }
+
+            $(".fill_TypeName").val(form_content[0]);
+            $(".fill_TypeDescrip").val(form_content[1]);
+
+        }
+    </script>
+
+
+
+{% endblock %}

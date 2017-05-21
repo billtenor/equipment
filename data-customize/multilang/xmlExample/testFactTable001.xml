@@ -1,0 +1,12 @@
+<DataModelFactsTable>
+    <DataModelID>testDataModel001</DataModelID>
+    <DataModelFactsTableID>testFactTable001</DataModelFactsTableID>
+    <FactIDs factSize = "6">
+        <factID>16</factID>
+        <factID>17</factID>
+        <factID>10</factID>
+        <factID>11</factID>
+        <factID>12</factID>
+        <factID>13</factID>
+    </FactIDs>
+</DataModelFactsTable>
